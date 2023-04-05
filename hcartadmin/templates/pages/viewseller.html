@@ -1,0 +1,47 @@
+{% extends 'pages/adminmaster.html' %}
+{% load static %}
+{% block content %}
+<div class="col-10 mt-5">
+<div class="text-center p-4">
+  <h4>VIEW SELLER</h4>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <table class="table  text-center  border shadow">
+        <thead style="background:orange;">
+          <th>Seller Name</th>
+          <th>Email</th>
+          <th>Address</th>
+          <th>Phone Number</th>
+          <th>Gender</th>
+          <th>Company Name</th>
+          <th>Account Holder Name</th>
+          <th>IFSC</th>
+          <th>Branch</th>
+          <th>Account Number</th>
+          <th>remove</th>
+        </thead>
+        <tbody class="table-striped">
+          {% for seller in seller_list %}
+          <tr class="table-light">
+            <td>{{seller.seller_name|upper}}</td>
+            <td>{{seller.email}}</td>
+            <td>{{seller.seller_add}}</td>
+            <td>{{seller.seller_pho}}</td>
+            <td>{{seller.sellergen}}</td>
+            <td>{{seller.comp_name}}</td>
+            <td>{{seller.acc_hold}}</td>
+            <td>{{seller.ifsc}}</td>
+            <td>{{seller.branch}}</td>
+            <td>{{seller.acc_num}}</td>
+            <td><button type="button" class="btn btn-danger"><a href="{% url 'hcartadmin:removeseller' seller.id %} "class="link-light">remove</button></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}

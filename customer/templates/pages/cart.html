@@ -1,0 +1,160 @@
+{% extends 'pages/masterhome.html' %}
+{% load static %}
+{% block content %}
+
+<div class="body row me-0">
+  <div class="col-md-8" style="height: 530px; overflow-y: scroll">
+    <div class="row ">
+      {% if cart_list %}
+      {% for cart in cart_list %}
+      <div class="prod_data card border shadow mt-3 w-75 mb-3" style="margin-left:150px; border:0px; text-align: left;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{{cart.prod.product_image.url}}" class="img p-2" alt="..." style="height: 210px; width: 250px;">
+          </div>
+          <div class="col-md-4"><span class="close" style="margin-left: 420px;"><a
+                href="{% url 'customer:remove_cart' cart.prod.id %}" class="link-danger"
+                style="text-decoration:none;"><i class="fa-solid fa-xmark fa-xl mt-3"></i></a></span>
+            <div class="cartcard card-body ms-5 p-2 ">
+              <h5 class="card-title">{{ cart.prod.product_name|upper }}</h5>
+              <h4 style="color:green"><b>₹ {{cart.prod.product_price}}</b></h4>
+              <p>Qty <input type="number" class="qty w-50 changequantity" data-item="{{cart.prod.id}}" value="{{cart.prod_quantity}}" min="1"
+                  max="{{cart.prod.current_stock}}"></p>
+                  <input type="hidden" class="prod_id" value="{{cart.prod.id}}">
+              <p class="card-text"><small class="text-muted">supplier: {{cart.prod.seller.seller_name}}</small></p>
+
+            </div>
+          </div>
+          <div class="card-footer w-100 bg-white">
+            <span class="col" style="margin-left:450px;">Total : <strong class="amt"
+                id="amt{{cart.prod.id}}">{{cart.total_price| stringformat:'d'}}</strong></span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <h6> empty </h6> 
+      {% endif %}
+    </div>
+  </div>
+  <div class="ch col-md-4 bg-white border shadow ">
+    <div class="checkout row mt-5 ms-2 me-2 g-0">
+      <div class="col-md-8">
+        <div class="row  pt-2">
+          <h6>Total</h6>
+        </div>
+        <hr>
+        <div class="row  pt-4">
+          <h6>Shipping</h6>
+        </div>
+        <hr>
+        <div class="row pt-4">
+          <h5>Grant Total</h5>
+        </div>
+        <hr>
+      </div>
+      <div class="col-md-4">
+        <div class="row  pt-2">
+          <h6><strong id="Total"></strong></h6>
+        </div><hr>
+        <div class="row  pt-4">
+          <h6><strong> 100 </strong></h6>
+        </div><hr>
+        <div class="row  pt-4">
+          <h5><strong id="grant"></strong></h5>
+        </div><hr>   
+      </div>
+      <div class=" mt-5">
+        <a href="{% url 'customer:checkout' %}" class="btn btn-warning w-100"><i class="fa-solid fa-cart-shopping me-2"></i>CHECKOUT</a>
+      </div><br>
+      <div class="row mt-5">
+        <span class=" col-2"><i class="fa-2xl fa-solid fa-truck-fast pt-4"></i> </span> <span class="col-10">
+          <h6>Fast & Standered Delivery</h6>
+          Faster delivery options available to most places
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.2.js" integrity="sha256-pkn2CUZmheSeyssYw3vMp1+xyub4m+e+QK4sQskvuo4="
+crossorigin="anonymous"></script>
+<script>
+  $(document).ready(function () {
+    displayTotal()
+    $.ajaxSetup({
+      headers: {
+        "X-CSRFToken": '{{ csrf_token }}'
+      }
+    })
+    $('input').change(function () {
+      let qty = $(this).val()
+      let pid = $(this).attr('data-item')
+
+      $.ajax({
+        url: "{% url 'customer:totalprice' %}",
+
+        data: {
+          'qty': qty,
+          'pid': pid
+        },
+        method: 'POST',
+        success: function (response) {
+          $('#amt' + pid).text(response.total)
+          console.log(response.total)
+          displayTotal()
+        }
+      })
+    })
+  })
+  function displayTotal() {
+
+
+    let total = 0
+    let shipping = 100
+    let amt = $(".amt")
+    let pqty = $(".qty")
+     
+    prodqty = parseInt(amt.textContent)*parseInt(pqty.textContent) 
+    console.log(amt)
+
+    for (let i = 0; i < amt.length; i++) {
+
+      total = total + parseInt(amt[i].textContent)
+
+    }
+    grant_total = total + shipping
+    $('#Total').html(total)
+    $('#grant').html(grant_total)
+
+  }
+
+</script>
+<script>
+ $(document).ready(function(){
+  $.ajaxSetup({
+    header: {
+      "X-CSRFToken": '{{ csrf_token }}'
+    }
+  })
+  $('.changequantity').click(function(e){
+      e.preventDefault();
+
+      var prod_id = $(this).attr('data-item');
+      var prod_quantity = $(this).val();
+
+      $.ajax({
+        method: 'post',
+        url: "{% url 'customer:quantity' %}",
+        data: {
+          'product_id':prod_id,
+          'product_qty':prod_quantity
+        },
+        success:function(response){
+          console.log(response.status)
+        }
+      })
+    })
+ }) 
+</script>
+{% endblock %}

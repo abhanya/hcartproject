@@ -1,0 +1,54 @@
+{% extends 'pages/masterhome.html' %}
+{% load static %}
+{% block content %}
+<div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active" data-bs-interval="10000">
+        <img src="{% static 'images/cusslide1.webp' %}" class="d-block w-100" alt="...">
+        <div class="carousel-caption d-none d-md-block ">
+          <h1 class="h1">CRAFTS Everyday !</h1>
+          <h3 class="h3">India's best handpicked Artisanal products</h3>        
+        </div>
+      </div>
+      <div class="carousel-item" data-bs-interval="2000">
+        <img src="{% static 'images/bg.webp' %}" class="d-block w-100" alt="...">
+        <div class="cartext carousel-caption d-none d-md-block p-0">
+          <h1 class="h1">CRAFTS Everyday !</h1>
+          <h3 class="h3">India's best handpicked Artisanal products</h3>        
+        </div>
+      </div>
+      <div class="carousel-item" data-bs-interval="2000">
+        <img src="{% static 'images/footwear.webp' %}" class="d-block w-100" alt="...">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+</div><br><br><br>
+<div class="span">Let's Start Shopping Now !</div>
+<div>
+  <div class="col-md-10">
+    <div class="row">
+    <div class="cards" style="gap:40px; margin-left:30px ">
+      {% for product in prods %}
+      
+      <div class="c card text-center" style="width: 18rem; border:white;">
+     <a href="{% url 'customer:product' product.id %}" class="link-dark"  style="text-decoration:none;">  
+      <img src="/media/{{product.product_image}}"style="height: 12rem; width:12rem;" class="card-img-top " alt="...">
+      <div class="card-body">
+          <h6 class="crdtitle card-titl ">{{product.product_name|title}}</h6> 
+        </div>
+      </a>
+      </div>
+    {% endfor %}
+    </div>
+</div>
+</div>
+</div> 
+
+{% endblock %}

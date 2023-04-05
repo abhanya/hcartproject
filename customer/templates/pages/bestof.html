@@ -1,0 +1,26 @@
+{% extends 'pages/masterhome.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/best.css' %}">
+<div class="">
+    <div class="row w-100">
+        <div class="head text-center h-75">
+            Hcart brings you the Best of evrything ! <br>
+            Discover things you won't find anywhere else
+        </div>
+    </div>
+    <div class="row mb-5">
+                <div class="card text-white mt-3 w-75 h-75">
+                    <img src="{% static 'images/bs1.png' %}" class="card-img-fluid " alt="...">
+                    <div class="card-img-overlay">
+                      <h5 class="card-title">Product Name</h5>
+                      <p class="card-text">RS</p>
+                      <p class="card-text">Last updated 3 mins ago</p>
+                    </div>
+                </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'pages/sellerhome.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="col-sm-10">
+  <div class="row"> 
+    {% for product in product %}    
+    <div class="col-md-4 mt-3">
+      <div class="card-light shadow border mt-3 mb-3" style="height:330px;">
+        <div class="text-center">
+        <h6>{{product.product_name|title}}</h6>
+        </div>
+        <div class="product align-items-center p-2 text-center">
+          <img src="{{product.product_image.url}}" alt="" class="rounded" width="160" height="140">
+        </div>
+        <div class="mt-3 info text-center">
+          <span class="text d-block">{{product.product_details}}</span>
+        </div>
+          <div class="cost mt-3 text-dark text-center">
+            <span>₹ {{product.product_price}}/-</span></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+  
+
+{%endblock%}

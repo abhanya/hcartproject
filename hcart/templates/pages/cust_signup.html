@@ -1,0 +1,84 @@
+{% extends 'pages/custhome.html' %}
+{% load static  %}
+
+
+
+{% block content %}
+<body class="bg">
+    <div class="container">
+        <div class="card shadow border mt-5 mb-5">
+        <div class="row">
+            
+            <div class="col w-25">
+<img src="{% static 'images/cus.jpg' %}" style="width:550px; height:550px;"class="rounded">
+            </div>
+            <div class="col text-left w-75">
+                <div class="content pt-3">
+            <form method="POST">
+                {% csrf_token %}
+                        <div class="cardcontent">
+                            <label for="exampleInputEmail1" class="form-label">name</label>
+                            <input type="text" class="form-control w-50" id="name" name="cust_name">
+                        
+                            <label for="exampleInputEmail1" class="form-label">address</label>
+                            <textarea class="form-control w-50" id="address" rows="3" name="cust_add"></textarea>
+                        
+                            <label for="" class="form-label">Gender :</label>
+                            <input type="radio"  value="male" id="male" name="gen">male
+                            <input type="radio"  value="female" id="female" name="gen">female<br>
+
+                            <label for="exampleInputEmail1" class="form-label">phone</label>
+                            <input type="text" class="form-control w-50" id="phone" name="cust_ph">
+                        
+                            <label for="exampleInputEmail1" class="form-label">Email address</label>
+                            <input type="email" class="form-control w-50" id="email" name="cust_em"><span id="e_error"></span>
+                            
+                        
+                            <label for="exampleInputPassword1" class="form-label">Password</label>
+                            <input type="password" class="form-control w-50" id="Pass" name="cust_passwrd"><br>
+                        
+                            <button type="submit" class="btn btn-primary" id="submit">Submit</button><br><span>{{msg}}</span><br>   
+                        </div>                           
+            </form>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        $('#email').change(function(){
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRFToken": $('[name=csrfmiddlewaretoken]').val() 
+                }
+            })
+    
+            $.ajax({
+    
+                url:'{% url "hcart:emailexist" %}', 
+                type:'POST',    
+                data:{                           
+                    email:$(this).val()
+                },
+                success:function(response){
+                    var email_err = document.getElementById('e_error')
+                    var email = document.getElementById('email')
+    
+                    if(response.status == true){
+                        email_err.innerHTML = "Email already exist"
+                        email_err.style.color = 'red'
+                        email_err.style.border = '1px solid red'
+                    }
+                    else{
+                        email_err.innerHTML = "succsess"
+                        email_err.style.color = 'green'
+                        email_err.style.border = '1px solid green'
+                    }
+                   
+                }
+    
+            })
+        })
+    </script>
+{% endblock %}

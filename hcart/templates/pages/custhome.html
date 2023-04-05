@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HCART</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+    crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.2.js" integrity="sha256-pkn2CUZmheSeyssYw3vMp1+xyub4m+e+QK4sQskvuo4=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://kit.fontawesome.com/1d9be7345c.css" crossorigin="anonymous">
+  <script src="https://kit.fontawesome.com/1d9be7345c.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="{% static 'css/custhome.css' %}">
+</head>
+
+<body class="body">
+  <header class="header">
+    <div class="log"></div>
+    <div class="div2">
+
+      <nav class=" navbar navbar-expand-lg bg-white " style="height:90px;">
+        <a href="{% url 'hcart:home' %}">
+          <img src="{% static 'images/hcartlogoo.png' %}" class="img"></a>
+          <a href="{% url 'customer:bestof' %}" style="text-decoration:none;">
+        <button type="button" class="btn btn-white"><b>Best of</b></button></a>
+        {% comment %} <button type="button" class="btn btn-white"><b>Track order</b></button> {% endcomment %}
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <a href="{% url 'hcart:catgry' %}" class="link-warning">
+            <button type="button" class="btn btn-white"><b>Category</b></button></a>
+            <a href="" class="link-warning">
+            <button type="button" class="btn btn-white"><b>Crafts</b></button></a>         
+            </li>
+          </ul>
+
+          <div class="logi mb-2 mt-3">
+            <div class="dropdown ">
+              <button class="btn btn-white dropdown-toggle h-100" type="button" id="dropdownMenuButton"
+                data-bs-toggle="dropdown">
+                <i class="fa-solid fa-user w-50 h-100"></i>
+              </button>
+
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="{% url 'hcart:clogin' %}">CUSTOMER</a></li>
+                <li><a class="dropdown-item" href="{% url 'hcart:sellerlog' %}">SELLER</a></li>
+              </ul>
+              {% comment %} </a> {% endcomment %}
+            </div>
+          </div>
+          <div class="crt mb-2">
+            <button type="button" class="btn btn-white h-100" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <i class="fa-sharp fa-solid fa-cart-shopping  h-100 w-100"></i>
+            </button>
+          </div>
+          <form class="d-flex " role="search">
+            <input class="form-control rounded" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-white" type="submit"><i class="fa-sharp fa-solid fa-magnifying-glass"></i></button>
+          </form>
+
+        </div>
+
+    </div>
+    </nav>
+    </div>
+
+  </header>
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">join Now !</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-">
+            <div class="modal-dialog shadow border text-center " style="width: 24rem;">
+              <div class="modal-content">
+                <img src="{% static 'images/cartsignup.webp' %}" class="card-img-top" alt="...">
+                <div class="modal-body">
+                  <h5 class="modal-title">signup to view your cart items</h5>
+                  <p class="card-text">
+                  <form method="POST">
+                    {% csrf_token %}
+                    <label for="exampleInputEmail1" class="card-label">phone</label>
+                    <input type="text" class="card-control w-50" id="phone" name="cpho">
+
+                    </p>
+                    {{msg}}
+                    <button type="submit" class="btn-primary">continue</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% block content %}
+  <div id="carouselExampleDark" class="carousel carousel-dark slide mt-0" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active" data-bs-interval="10000">
+        <img src="{% static 'images/bac.webp' %}" class="d-block w-100" alt="...">
+        <div class="carousel-caption d-none d-md-block">
+          <h1 class="h1">CRAFTS Everyday !</h1>
+          <h3 class="h3">India's best handpicked Artisanal products</h3>
+
+        </div>
+      </div>
+
+    </div><br><br><br>
+
+    <div class="start">
+      
+    </div><br>
+
+    <div class="bgimg w-100 ">
+
+      <p>
+      <h4>JOIN THE H-CART FAMILY !</h4><br>
+      Welcome to our world of art & craft. Here you will get fresh new arrivals.<br>
+      If you value the hardwork of our artisans and look forward to adorning yourself or your home with something
+      meaningful,<br>
+      Then sign up and join the family.<br>
+      <a href="{% url 'hcart:s_signup' %}">register now !</a>
+
+
+    </div>
+    {% endblock %}
+
+    <table class="foottable w-100">
+      <tr>
+        <td rowspan="2" class="foottd1">
+          <img src="{% static 'images/751.jpg' %}" style="height:100px;">
+        </td>
+        <td class="foot"><b>Quick links</b></td>
+        <td class="foot"><b>Best of category</b></td>
+        <td class="foot"><b>Follow us</b></td>
+      <tr>
+        <td class="foot">
+          contact us<br>
+          about us<br>
+          shipping<br>
+          social reviews<br>
+          payments<br>
+          returns and cancellation<br>
+          privacy
+        </td>
+        <td class="foot">
+          woolen<br>
+          neckleces<br>
+          Fabrics<br>
+          giftings<br>
+          home decors<br>
+          Curtains
+        </td>
+        <td class="foot">
+          <img src="{% static 'images/f.jpg' %}" style="height:50px">
+          <img src="{% static 'images/i.jpg' %}" style="height:50px">
+          <img src="{% static 'images/t.jpg' %}" style="height:50px">
+        </td>
+      </tr>
+      <tr>
+        <td class="last">
+          <P>All Right Reserved 2022</P>
+        </td>
+        <td>
+          privacy policy
+        </td>
+        <td colspan="2">
+          terms of usage
+        </td>
+      </tr>
+    </table>
+
+</body>
+
+</html>

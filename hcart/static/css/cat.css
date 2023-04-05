@@ -1,0 +1,8 @@
+.catogory{
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+}
+.nw{
+    /* text-align: center; */
+    padding-top: 60px;
+}

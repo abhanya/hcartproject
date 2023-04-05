@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HCART</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.2.js" integrity="sha256-pkn2CUZmheSeyssYw3vMp1+xyub4m+e+QK4sQskvuo4="
+    crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://kit.fontawesome.com/1d9be7345c.css" crossorigin="anonymous">
+  <script src="https://kit.fontawesome.com/1d9be7345c.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="{% static 'css/cushome.css' %}">
+  <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+</head>
+
+<body class="body">
+  <header class="header">
+    <div class="log">
+    </div>
+    <div class="nev">
+      <nav class=" navbar navbar-expand-lg bg-white " style="height:90px;">
+        <a class="btn btn-white" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
+          aria-controls="offcanvasExample">
+          <i class="fa-lg fa-solid fa-circle-user"></i>
+        </a>
+        <a href="{% url 'customer:customerhome' %}" class="btn btn-white"><i class="fa-solid fa-house"></i></a>
+        <a href="{% url 'customer:order' %}" class="btn btn-white">My orders</a>
+        <button type="button" class="btn btn-white"><b>Best of</b></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <a href="{% url 'customer:custcatg' %}" class="link-warning">
+              <button type="button" class="btn btn-white"><b>Category</b></button></a>
+            <a href="" class="link-warning">
+              <button type="button" class="btn btn-white"><b>Crafts</b></button></a>
+            </li>
+          </ul>
+          <form class="d-flex " role="search" method="post" action="{% url 'customer:searchproducts' %}">
+            {% csrf_token %}
+            <input class="form-control h-25 outline-round" type="search" placeholder="Search" aria-label="Search"
+              name="searchdata" id="serch">
+            <button class="btn btn-white" type="submit" id="srch"><i
+                class="fa-sharp fa-solid fa-magnifying-glass"></i></button>
+          </form>
+          <div class="logi mb-2 mt-3">
+            <a href="{% url 'customer:cart' %}" class="btn btn-white"><i
+                class="fa-sharp fa-solid fa-cart-shopping"></i></a>
+            <a href="{% url 'customer:wishlist' %}" class="btn btn-white me-3"><i class="fa-solid fa-heart"></i></a>
+          </div>
+        </div>
+
+    </div>
+    </div>
+  </header>
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header" style="background:darkorange;">
+      <h5 class="offcanvas-title" id="offcanvasExampleLabel">{{cusdata.customer_name|title}}</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div>
+        <form method="POST" action="{% url 'customer:chome' %}">
+          {% csrf_token %}
+          <div class="float">
+            <img src="{%static 'images/profile.webp'%}" class="rounded float-center w-25 h-25" alt="...">
+          </div>
+          <div class="mb-3 ">
+            <label for="exampleFormControlInput1" class="form-label">Name</label>
+            <input type="text" name="c_name" class="form-control" id="exampleFormControlInput1"
+              value="{{cusdata.customer_name}}">
+          </div>
+          <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Email address</label>
+            <input type="email"  name="c_email" class="form-control" id="email"
+              value="{{cusdata.customer_email}}">
+            <span id="email_error"></span>
+          </div>
+          <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Adress</label>
+            <input type="text" class="form-control h-50" name="c_address" id="exampleFormControlTextarea1" rows="3"
+              value="{{cusdata.address}}">
+          </div>
+          <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Phonenumber</label>
+            <input type="number" name="c_number"  class="form-control" id="exampleFormControlInput1"
+              value="{{cusdata.cust_phone}}">
+          </div>
+          <div class="mb-3 ">
+            <label for="exampleFormControlInput1" class="form-label">Gender :</label>
+            <div class="form-check form-check-inline" >
+              <input class="form-check-input" name="c_gender" type="radio" name="inlineRadioOptions" id="inlineRadio1"  value="male">
+              <label class="form-check-label" for="inlineRadio1">Male</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" name="c_gender" type="radio" name="inlineRadioOptions" id="inlineRadio2"
+                value="female">
+              <label class="form-check-label" for="inlineRadio2">Female</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" name="c_gender" type="radio" name="inlineRadioOptions" id="inlineRadio3"
+                value="other                                       ">
+              <label class="form-check-label" for="inlineRadio3">Other</label>
+            </div>
+          </div>
+          <p style="color: green;">{{ msg }}</p><br><br>
+          <div>
+            <button type="submit" class="s btn "><i class="fa-solid fa-floppy-disk me-1"></i>Save</button>
+            <a href="{% url 'customer:cpass' %}" class="cb btn ">
+              <i class="fa-solid fa-key me-1"></i>password</a>
+              <a href="{% url 'customer:clogout' %}" class=" btn ">
+                <i class="fa-solid fa-power-off me-1"></i>Logout</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% block content %}
+
+
+  {% endblock %}
+
+  
+  <table class="foottable w-100">
+    <tr>
+      <td rowspan="2" class="foottd1">
+        <img src="{% static 'images/751.jpg' %}" style="height:100px;">
+      </td>
+      <td class="foot"><b>Quick links</b></td>
+      <td class="foot"><b>Best of category</b></td>
+      <td class="foot"><b>Follow us</b></td>
+    <tr>
+      <td class="foot">
+        contact us<br>
+        about us<br>
+        shipping<br>
+        social reviews<br>
+        payments<br>
+        returns and cancellation<br>
+        privacy
+      </td>
+      <td class="foot">
+        woolen<br>
+        neckleces<br>
+        Fabrics<br>
+        giftings<br>
+        home decors<br>
+        Curtains
+      </td>
+      <td class="foot">
+        <img src="{% static 'images/f.jpg' %}" style="height:50px">
+        <img src="{% static 'images/i.jpg' %}" style="height:50px">
+        <img src="{% static 'images/t.jpg' %}" style="height:50px">
+      </td>
+    </tr>
+    <tr>
+      <td class="last">
+        <P>All Right Reserved 2022</P>
+      </td>
+      <td>
+        privacy policy
+      </td>
+      <td colspan="2">
+        terms of usage
+      </td>
+    </tr>
+  </table>
+</body>
+
+</html>

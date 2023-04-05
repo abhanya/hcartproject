@@ -1,0 +1,41 @@
+{% extends 'pages/adminmaster.html' %}
+{% load static %}
+{% block content %}
+<div class="col-9 mt-5">
+<div class="text-center p-4">
+    <h4>VIEW PRODUCT</h4>
+</div>
+<div class="container">
+<div class="row">   
+    <div class="">
+        <table class="table border shadow p-3">
+            <thead style="background:orange;">
+            <th>product</th>
+            <th>Product Number</th>
+            <th>Product Name</th>
+            <th>Seller</th>
+            <th>Seller Name</th>
+            <th>Remove</th>
+            </thead>
+            <tbody>
+                {% for product in prod_list %}
+                <tr class="table-light">
+                    <td><img src="{{ product.product_image.url }}" height="100px" width="100px" class="rounded" alt="..."></td>
+                    <td>{{ product.product_number}}</td>
+                    <td>{{ product.product_name }}</td>
+                    <td><img src="{{ product.seller.seller_pic.url }}"  height="100px" width="100px" class="rounded" alt="..."></td>
+                    <td>{{ product.seller.seller_name}}</td>                         
+                    <td>                        
+                        <button type="button" class="btn btn-success "><a href="{% url 'hcartadmin:removeproduct' product.id %} "class="link-light"> remove</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</div>
+<div>
+</div>
+{% endblock %}

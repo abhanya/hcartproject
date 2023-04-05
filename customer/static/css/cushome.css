@@ -1,0 +1,111 @@
+.span{
+    text-align: center;
+    height: 150px ;
+    text-decoration: wavy;
+    color: orange;
+    font-weight: 200;
+}
+
+.cards{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    grid-template-rows: repeat(2,1fr);
+    align-content: space-around;
+    row-gap: 10px;
+
+}
+
+.header{
+    position: sticky;
+    top: 0px;
+    z-index: 999;
+}
+.log{
+    width: 100%; 
+    background-color: black; 
+    height: 40px;
+    position: sticky;
+    top: 0px;
+    z-index: 999;
+    /* display: flex; */
+}
+.navbar-brand{
+    color: black;
+    padding-left: 0px;
+    padding-right: 720px;
+    width: 100%;
+}
+.row-12{
+    width: 100%;
+}
+.foottable{
+    background-color: black;
+    color: orange;
+}
+.cusn{
+    margin-left: 10px;
+}
+
+.card-img-top{
+    transition: transform .7s;
+    position: relative;
+    top:10px;
+}
+.card-img-top:hover{
+    transition: transform .7s;
+    top: 10px;
+    transform: scale(105%);
+}
+.crdtitle:hover{
+    position: inherit;
+    transition: ease-out;
+    transition: 0.2s;
+    top: 20px;
+    bottom: 20px;
+}
+.nev:hover{
+    color: #f79a20;
+}
+/* .btn-warning{
+    color: black;
+    height: 40px;
+  border: 3px solid #f79a20;
+  background-image: -webkit-linear-gradient(30deg, #f79a20 50%, transparent 50%);
+  background-image: linear-gradient(30deg, #f79a20 50%, transparent 50%);
+  background-size: 500px;
+  background-repeat: no-repeat;
+  background-position: 0%;
+  -webkit-transition: background 300ms ease-in-out;
+  transition: background 300ms ease-in-out;
+  background-color: grey; 
+} */
+.h1{
+    text-align: left;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+}
+.h3{
+    text-align: left;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.body{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+}
+
+.body{
+    background-color: rgb(252, 250, 231);
+}
+
+.c{
+    background-color: rgb(252, 250, 231);
+
+}
+.cartcard{
+    text-align: left;
+}
+.cc{
+    text-align: left;
+}
+
+

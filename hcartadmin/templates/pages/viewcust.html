@@ -1,0 +1,43 @@
+{% extends 'pages/adminmaster.html' %}
+{% load static %}
+
+{% block content %}
+<div class="col-10 mt-5">
+<div class="text-center p-4">
+    <h4>VIEW CUSTOMER</h4>
+</div>
+
+<div class="container">
+    <div class="row">
+        
+        <div class="">
+            <table class="table border shadow">
+                <thead style="background:orange;">
+                    <th>Customer Name</th>
+                    <th>Customer Email</th>
+                    <th>Address</th>
+                    <th>Gender</th>
+                    <th>Phone Number</th>
+                    <th>Password</th> 
+                    <th>remove</th>                  
+                </thead>
+                <tbody>
+                    {% for customer in cust_list %}
+                <tr class="table-light">
+                    <td>{{customer.customer_name|upper}}</td>
+                    <td>{{customer.customer_email}}</td>
+                    <td>{{customer.address}}</td>
+                    <td>{{customer.gender}}</td>
+                    <td>{{customer.cust_phone}}</td>
+                    <td>{{customer.cust_pass}}</td>
+                    <td><button type="button" class="btn btn-danger"><a href="{% url 'hcartadmin:delet_cust' customer.id %} "class="link-light">remove</button></td>
+                </tr>
+                {% endfor %}    
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+</div>
+{% endblock %}

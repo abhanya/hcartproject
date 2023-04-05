@@ -1,0 +1,63 @@
+{% extends 'pages/sellerhome.html' %}
+{% load static %}
+{%block content%}
+<div class="col-10 col-sm-8 col-md-6 m-auto">
+    <div class="card-light shadow border w-100 mt-5 mb-5">
+        <div class="card-body p-3">
+            <div>
+                <form method="POST">
+                    {% csrf_token %}
+                <div class="float">
+                    <img src="{{data.seller_pic.url}}" height="300px" width="300px" class="rounded-circle mx-auto d-block w-25 h-25" alt="...">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label"></label>
+                    <input type="text" name="s_name" class="form-control " id="exampleFormControlInput1" value="{{data.seller_name|title}}">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                    <input type="email" name="s_email" class="form-control" id="email" value="{{data.email|title}}">
+                    <span id="email_error"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Adrdess</label>
+                    <input type="textarea" class="form-control" name="s_address" id="exampleFormControlTextarea1" rows="3" value="{{data.seller_add|title}}">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Phonenumber</label>
+                    <input type="number" name="s_number" class="form-control" id="exampleFormControlInput1" value="{{data.seller_pho|title}}">
+                </div>
+                <div class="mb-3 ">
+                    <label for="exampleFormControlInput1" class="form-label">Gender    :</label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" name="c_gender" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="male">
+                        <label class="form-check-label" for="inlineRadio1">Male</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" name="c_gender" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="female">
+                        <label class="form-check-label" for="inlineRadio2">Female</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" name="c_gender" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="other                                       ">
+                        <label class="form-check-label" for="inlineRadio3">Other</label>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Business name</label>
+                    <input type="text" name="businame" class="form-control" id="exampleFormControlInput1" value="{{data.comp_name|title}}">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleFormControlInput1" class="form-label">account number</label>
+                  <input type="text" name="acc_number" class="form-control" id="exampleFormControlInput1" value="{{data.acc_num|title}}">
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">IFSC</label>
+                <input type="text" name="ifsc" class="form-control" id="exampleFormControlInput1" value="{{data.ifsc|title}}">
+            </div>
+            <button type="submit" class="btn btn-warning mx-auto d-block w-50">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

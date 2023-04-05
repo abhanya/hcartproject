@@ -1,0 +1,120 @@
+.log{
+    height: 35px;
+    align-items: flex-end;
+    background-color: black;
+    border: 1px black solid;
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+.logi{
+    height: 55px;
+    border-top: 4px;
+}
+.div2{
+    height: 90px;
+    color: black;
+    /* margin-top: 35px; */
+
+}
+.img{
+    height: 70px;
+    width: 80px;
+}
+.h1{
+    
+    text-align:left;
+    color: black;
+}
+.h3{
+    text-align:left;
+    color: black;
+}
+.btn{
+    height: 32px;
+}
+
+
+.start{
+    text-align: center;
+    height: 150px ;
+    text-decoration: wavy;
+    color: orange;
+}
+
+.cards{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    grid-template-rows: repeat(2,1fr);
+    align-content: space-around;
+    row-gap: 10px;
+    /* justify-content: space-between; */
+
+}
+
+.d-block{
+    height: 530px;
+    margin-top: 0px;
+}
+    
+.p{
+    color: white;
+}
+
+.bgimg{
+    background-image: url('../images/Group.webp');
+    height: 350px;
+    text-align: center;
+}
+
+.footer-container{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    border: 1px black solid;
+    height: 300px;
+}
+.header{
+    position: sticky;
+    top: 0px;
+    z-index: 1020;
+    
+}
+
+.foottable{
+    background-color: black ;
+    color: orange;
+}
+
+.card{
+    transition: transform .2s;
+}
+.card:hover{
+    transform: scale(102%);
+}
+
+.btn-warning{
+
+    color: black;
+    height: 40px;
+  border: 3px solid #f79a20;
+  background-image: -webkit-linear-gradient(30deg, #f79a20 50%, transparent 50%);
+  background-image: linear-gradient(30deg, #f79a20 50%, transparent 50%);
+  background-size: 500px;
+  background-repeat: no-repeat;
+  background-position: 0%;
+  -webkit-transition: background 300ms ease-in-out;
+  transition: background 300ms ease-in-out;
+}
+.btn-warning:hover {
+    background-position: 100%;
+    color: #f79a20;
+  }
+  
+.div2:hover{
+    color: #f79a20;
+}
+
+.body{
+    background-color: rgb(253, 240, 241);
+}

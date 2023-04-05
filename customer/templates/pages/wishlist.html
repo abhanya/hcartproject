@@ -1,0 +1,34 @@
+{% extends 'pages/masterhome.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            {% for product in wish_list %}
+            <div class="col-md-5 g-0 pb-4">
+                <div class="card mt-3 w-75" style="margin-left:50px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{{product.prod.product_image.url}}" class="img-fluid rounded-start" alt="..."
+                                style="height: 210px; width: 250px;">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body mb-0">
+                                <h6 class="card-title">{{ product.prod.product_name|upper }}</h6>
+                                <h5 class="card-text"><b>₹ {{product.prod.product_price}}</b></h5><br><br>
+                                <a href="" class="btn btn-success" style="text-decoration:none;">                                   
+                                        <p class="card-text"><i class="fa-solid fa-bag-shopping me-2"></i>Buy now</p>
+                                </a>
+                                <a href="{% url 'customer:removefromwishlist' product.prod.id %}" class="btn btn-danger" style="text-decoration:none;">                                   
+                                    <p class="card-text"><i class="fa-solid fa-trash me-2"></i> Remove</p>
+                            </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

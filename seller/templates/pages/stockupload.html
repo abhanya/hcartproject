@@ -1,0 +1,68 @@
+{% extends 'pages/sellerhome.html' %}
+{% load static %}
+    {% block content %}
+    <div class="col-10 col-sm-8 col-md-6 m-auto">
+        <div class="card shadow border p-5 mt-3 mb-3">
+            <div class="card-body">
+                <h3>UPDATE PRODUCT</h3><i class="fa-solid fa-delete-right"></i>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="number" hidden id="p_id" name="productid">
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Product Name</label>
+                        <select name="" id="productname">
+                            <option  disabled selected>Select Product</option>
+                            {% for product in prod_data %}
+                            <option value="{{product.id}}">{{product.product_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">current stock</label>
+                        <input type="name" name=''  class="form-control" id="c_stock">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Update stock</label>
+                        <input type="number" name='new_stock' class="form-control" id="n_stock" value="0">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">current Price</label>
+                        <input type="number" name='new_price' class="form-control" id="c_price">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Update stock</button>
+                </form>
+            </div>        
+        </div>
+    </div>
+
+
+    <script>
+   
+        $('#productname').change(function(){      
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRFToken": $('[name=csrfmiddlewaretoken]').val() 
+                }
+            })
+    
+            $.ajax({
+    
+                url:'{% url "seller:getstock" %}',  
+                type:'POST',         
+                data:{                           
+                    id:$(this).val()
+                },
+                success:function(response){
+                    
+             
+                    $('#c_stock').val(response.stock)                   
+                    $('#p_id').val(response.pro_id)
+                    $('#c_price').val(response.p_price)
+
+                }
+    
+            })
+        })
+        
+    </script>
+{% endblock %}

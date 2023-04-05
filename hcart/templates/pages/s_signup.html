@@ -1,0 +1,69 @@
+{% extends 'pages/custhome.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+</head>
+{%block content%}
+
+    <div class="container">
+        <div class="card shadow border mt-5 mb-5">
+        <div class="row">
+            
+            <div class="col w-25">
+<img src="{% static 'images/signupsell.jpg' %}" style="width:550px; height:900px;"class="rounded">
+            </div>
+            <div class="col text-left w-75">
+                <div class="content pt-3">
+            <form method ='POST'enctype = 'multipart/form-data'>
+                {% csrf_token %}
+                <label for="exampleInputEmail1" class="form-label">name</label>
+                <input type="text" class="form-control w-50"  name="s_name" id="name">
+
+                <label for="exampleInputEmail1" class="form-label">address</label>
+                <textarea class="form-control w-50"  rows="3" name="s_add" id="address"></textarea><br>
+
+                <label for="" class="form-label">Gender :</label>
+                <input type="radio" name="gender" value="male" id="male">male
+                <input type="radio" name="gender" value="female" id="female">female<br>
+
+                <label for="exampleInputEmail1" class="form-label">phone</label>
+                <input type="text" class="form-control w-50" id="phone" name="s_ph">
+
+                <label for="exampleInputEmail1" class="form-label">Company name</label>
+                <input type="text" class="form-control w-50" id="cn" name="c_name">
+
+                <label for="exampleInputEmail1" class="form-label">Account holder name</label>
+                <input type="text" class="form-control w-50" id="an" name="acc_h">
+
+                <label for="exampleInputEmail1" class="form-label">ifsc</label>
+                <input type="text" class="form-control w-50" id="phone" name="ifsc">
+
+                <label for="exampleInputEmail1" class="form-label">branch</label>
+                <input type="text" class="form-control w-50" id="br" name="branch">
+
+                <label for="exampleInputEmail1" class="form-label">Account number</label>
+                <input type="text" class="form-control w-50" id="br" name="acc_n">
+
+                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                <input type="email" class="form-control w-50" id="email" name="email">
+
+                <label for="exampleInputPassword1" class="form-label">Upload file</label>
+                <input type="file" class="form-control w-50"  name="sellimg" ><br>
+
+                <button type="submit" class="btn btn-primary" id="submit">Submit</button><span>{{msg}}</span><br><br>
+            </form>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

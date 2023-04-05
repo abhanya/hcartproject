@@ -1,0 +1,58 @@
+{% extends 'pages/masterhome.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <div class="row pt-5">
+        <div class="col-sm-2">
+            <div class="new">
+                <a href="{% url 'customer:custcatg' %}"><img src="{% static 'images/nwcoll.png' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;"></a> 
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="crafts">
+                <a href="{% url 'customer:catogry' 'Crafts' %}">
+                <img src="{% static 'images/crft.jpg' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;"></a>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="home">
+                <img src="{% static 'images/hom.jpg' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;">
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="jwelry">
+                <img src="{% static 'images/jw.jpg' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;">
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="toys">
+                <img src="{% static 'images/toy.jpg' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;">
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="gift">
+                <img src="{% static 'images/gif.jpg' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8 offset-sm-2">
+            <div class="row m-auto">
+                {% for product in prods %}
+                <div class="col-md-4 mt-5 ">
+                    <div class="c card text-center" style="width: 18rem; border:white;">
+                        <a href="{% url 'customer:product' product.id %}" class="link-dark"  style="text-decoration:none;"> 
+                            <img src="{{product.product_image.url}}"style="height: 12rem; width:12rem;" class="card-img-top " alt="...">
+                            <div class="card-body">
+                              <h6 class="card-title">{{product.product_name|title}}</h6> 
+                            </div>
+                          </a>
+                          </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

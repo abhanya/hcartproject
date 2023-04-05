@@ -1,0 +1,23 @@
+{% extends 'pages/custhome.html' %}
+{% load static  %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/cat.css' %}">
+<div class="container">
+    <div class="catogory">
+            <div><img src="{% static 'images/nwcoll.png' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;"></div>
+            <div class="nw">New collections !</div>
+            <div class="nw ">Crafts</div>
+            <div style="margin: auto;"><img src="{% static 'images/crft.jpg' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;"></div>
+            <div><img src="{% static 'images/clthng.jpg' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;"></div>
+            <div class="nw ">Clothings !</div>
+            <div class="nw ">Home & kitchens !</div>
+            <div style="margin: auto;"><img src="{% static 'images/hom.jpg' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;"></div>
+            <div><img src="{% static 'images/jwl.jpg' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;"></div>
+            <div class="nw ">Jwellry !</div>
+            <div class="nw ">Toys !</div>
+            <div style="margin: auto;"><img src="{% static 'images/toy.jpg' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;"></div>
+            <div><img src="{% static 'images/gif.jpg' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;"></div>
+            <div class="nw r">Giftings !</div>
+    </div>
+</div>
+{% endblock %}
