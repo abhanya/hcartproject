@@ -25,7 +25,6 @@ class Oreder(models.Model):
     city = models.CharField(max_length=50)
     total_price = models.IntegerField()
     payment_mode = models.CharField(max_length=100,null=False)
-    status= models.CharField(max_length=100,default="pending")
     tracking_no = models.CharField(max_length=50,null=True)
     created_at = models.DateField(auto_now_add=True)
 
@@ -35,11 +34,5 @@ class Order_item(models.Model):
     product = models.ForeignKey(Product,on_delete = models.CASCADE)
     price = models.FloatField(null=False)
     quantity = models.IntegerField(null=False)
+    status= models.CharField(max_length=100,default="pending")
 
-
-
-    
-
-
-
-    

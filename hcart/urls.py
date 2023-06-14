@@ -12,6 +12,7 @@ urlpatterns = [
     path('sellersignup',views.signup,name="s_signup"),
     path('sellerlogin',views.sellerlog,name="sellerlog"),
     path('emailexist',views.email_exist,name="emailexist"),
-
+    path('emailexist',views.seller_email_exist,name="selleremailexist"),
+    path('bestof',views.bestof,name='bestof'),
 
 ]

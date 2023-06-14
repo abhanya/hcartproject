@@ -1,9 +1,12 @@
 from django.shortcuts import render,redirect
 from hcart.models import Customer,Seller
 from seller.models import Product
+from customer.models import Oreder,Order_item
 import random
 from django.core.mail import send_mail
 from django.conf import settings
+from django.db.models import Count
+
 
 
 # Create your views here.
@@ -15,6 +18,16 @@ def adhome(request):
     prod_count = product_list.count()
     sellers = Seller.objects.all()
     sell_count = sellers.count()
+    orders = Oreder.objects.all()
+    order_count =orders.count()
+    order_list = Order_item.objects.order_by('-id')[:6]
+
+    # top_selling_products = Order_item.objects.values('product_id').annotate(total_quantity=Sum('quantity')).order_by('-total_quantity')
+
+    # print(top_selling_products)
+
+    topsellingproduct = Order_item.objects.values('product_id','product__product_name','product__product_image','product__product_price','seller_id','seller__seller_name').annotate(count=Count('product_id')).order_by('-count').values('product__product_name','product__product_image','product__product_price','seller__seller_name')[:3]
+    print(topsellingproduct)
     context = {
         'cust_list':customers,
         'sell_list':sellers,
@@ -22,6 +35,9 @@ def adhome(request):
         'cust_count':cust_count,
         'sell_count':sell_count,
         'prod_count':prod_count,
+        'order_count':order_count,
+        'order_list':order_list,
+        'topselling':topsellingproduct,
     }
     return render(request,'pages/adminhome.html',context)
 
@@ -92,6 +108,7 @@ def master(request):
     return render(request,'pages/adminmaster.html')
 
 def orderlist(request):
-    return render(request,'pages/vieworderlist.html')
+    orders = Order_item.objects.all()
+    return render(request,'pages/vieworederlist.html',{'order_list':orders})
 
 

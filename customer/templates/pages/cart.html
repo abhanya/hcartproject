@@ -7,22 +7,23 @@
     <div class="row ">
       {% if cart_list %}
       {% for cart in cart_list %}
-      <div class="prod_data card border shadow mt-3 w-75 mb-3" style="margin-left:150px; border:0px; text-align: left;">
+      <div class="prod_data card border shadow mt-3 w-75 mb-3 mx-auto" style="border:0px; text-align: left;">
         <div class="row g-0">
           <div class="col-md-4">
-            <img src="{{cart.prod.product_image.url}}" class="img p-2" alt="..." style="height: 210px; width: 250px;">
+            <img src="{{cart.prod.product_image.url}}" class="img img-fluid p-2" alt="...">
           </div>
-          <div class="col-md-4"><span class="close" style="margin-left: 420px;"><a
+          <div class="col-md-4"><span class="close" style="margin-left: 95%;"><a
                 href="{% url 'customer:remove_cart' cart.prod.id %}" class="link-danger"
                 style="text-decoration:none;"><i class="fa-solid fa-xmark fa-xl mt-3"></i></a></span>
-            <div class="cartcard card-body ms-5 p-2 ">
+            <div class="cartcard card-body p-2 ">
+            <a href="{% url 'customer:product' cart.prod.id %}" class="link-dark" style="text-decoration: none;">
               <h5 class="card-title">{{ cart.prod.product_name|upper }}</h5>
               <h4 style="color:green"><b>₹ {{cart.prod.product_price}}</b></h4>
               <p>Qty <input type="number" class="qty w-50 changequantity" data-item="{{cart.prod.id}}" value="{{cart.prod_quantity}}" min="1"
                   max="{{cart.prod.current_stock}}"></p>
                   <input type="hidden" class="prod_id" value="{{cart.prod.id}}">
               <p class="card-text"><small class="text-muted">supplier: {{cart.prod.seller.seller_name}}</small></p>
-
+            </a>
             </div>
           </div>
           <div class="card-footer w-100 bg-white">
@@ -31,9 +32,12 @@
           </div>
         </div>
       </div>
+      
       {% endfor %}
       {% else %}
-      <h6> empty </h6> 
+      <div class="row-container">
+      <img src="{% static 'images/emptycart.webp' %}" alt="" class="img">
+      </div> 
       {% endif %}
     </div>
   </div>
@@ -64,9 +68,9 @@
           <h5><strong id="grant"></strong></h5>
         </div><hr>   
       </div>
-      <div class=" mt-5">
+      <div class="row mt-3">
         <a href="{% url 'customer:checkout' %}" class="btn btn-warning w-100"><i class="fa-solid fa-cart-shopping me-2"></i>CHECKOUT</a>
-      </div><br>
+      </div>
       <div class="row mt-5">
         <span class=" col-2"><i class="fa-2xl fa-solid fa-truck-fast pt-4"></i> </span> <span class="col-10">
           <h6>Fast & Standered Delivery</h6>

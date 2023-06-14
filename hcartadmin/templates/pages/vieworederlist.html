@@ -2,20 +2,37 @@
 {% load static %}
 
 {% block content %}
-<div class="col-10 mt-5">
-<div class="text-center p-4">
-    <h4>VIEW CUSTOMER</h4>
+<div class="col-12 mt-5">
+    <div class="text-center py-4 mx-3">
+    <div class="container-fluid mt-5">
+    <h4>ORDER DETAILS</h4>
 </div>
-
 <div class="container">
     <div class="row">       
         <div class="">
-            <table class="table border shadow">
+            <table class="table bg-white rounded shadow border  table-hover text-center mt-3"
+                style="font-weight: lighter;">
                 <thead style="background:orange;">                                     
-                </thead>
-                <tbody>
-                   
-                <tr class="table-light"></tr>
+                <tr class="table-light">
+                    <td>Date</td>
+                    <td>Customer</td>
+                    <td>Product</td>
+                    <td>Seller</td>
+                    <td>Price</Td> 
+                    <td>Status</td>
+                </tr>
+            </thead>
+                <tbody> 
+                    {% for order in order_list %}
+                    <tr>                
+                    <td>{{order.oreder.created_at}}</td>
+                    <td>{{order.oreder.first_name}}</td>
+                    <td>{{order.product.product_name}}</td>
+                    <td>{{order.seller.seller_name}}</td>
+                    <td>{{order.price}}</td>
+                    <td>{{order.status}}</td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

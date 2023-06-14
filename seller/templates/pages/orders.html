@@ -1,0 +1,44 @@
+{% extends 'pages/sellermaster.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+<div class="col-12 mt-5">
+<div class="container-fluid">
+    <div class="row mt-5"> 
+        <h5>Orders </h5>      
+        <div class="col-md-10">
+            <table class="table border shadow ms-5">
+                <thead> 
+                    <th>Order id</th>
+                    <th>Customer Name</th>
+                    <th>Order</th>
+                    <th>Purchasing Date</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th>Payment mode</th>  
+                    <th>More info</th>                                
+                </thead>
+                <tbody>
+                {% for products in orderlist %}  
+                <tr class="table-light">
+                <td>{{products.oreder.id}}</td>
+                <td>{{products.oreder.first_name}}</td>
+                <td>{{products.product.product_name}}</td>
+                <td>{{products.oreder.created_at}}</td>
+                <td>₹{{products.oreder.total_price }}</td>
+                <td>{{products.status }}</td>
+                <td>{{products.oreder.payment_mode}}</td>
+                <td><a href="{% url 'seller:orderdetails' customer_id=products.oreder.id %}" class="btn btn-warning">view</a></td>
+                {% endfor %}</tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4">
+
+        </div>
+    </div>
+</div>
+</div>
+</div>
+{% endblock %}

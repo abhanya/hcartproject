@@ -9,8 +9,8 @@
 }
 .hrt {
   position: absolute;
-  bottom: 0;
-  left: 0;
+  top: 0;
+  left: 3;
   width: 50px;
   height: 50px;
   /* background-color: #333; */
@@ -19,97 +19,81 @@
   align-items: center;
   cursor: pointer;
 }
-.fa-heart.active {
-  color: red;
-}
 
 
 </style>
   
-<div class="main container p-5">
-  <div class="row g-0 border shadow">
-    <div class="col-md-4 ">
+<div class="main container mx-5 my-5">
+  <div class=" row g-0  ">
+    <div class="prod_data col-md-4 ">
       <form method="POST">
         {% csrf_token %}
         <div class="container">
-        <!-- <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img src="{{pdetail.product_image.url}}"class="img-fluid rounded-start" alt="..." >
-            </div>
-            <div class="carousel-item">
-              <img src="{{pdetail.product_image.url}}"class="img-fluid rounded-start" alt="..." style="height:350; width:350px">
-            </div>
-          </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
-        </div>
-        </div> -->
         <img src="{{pdetail.product_image.url}}"class="img-fluid rounded-start p-2" alt="..." style="height:350px; width:350px">
-      <div class="hrt col-md-2"><a href="{% url 'customer:addtowishlist' pdetail.id %}" class="link-dark ms-5 mb-3" id="hert" ><i onclick="myFunction(this)" class="hr fa-lg fa-solid fa-heart" id="heart-icon"></i></a></div>
+        <span id="message"></span>
+        <!-- <i class="hr fa-lg fa-solid fa-heart wishlist-icon" style="color: black;"></i> -->
+        <input type="hidden" value="{{pdetail.id}}" class="prod_id">
+        {% if pdetail.id in request.session.wishlist %}
+        <div class="hrt addtowishlist  col-md-2"><i class="hr fa-lg fa-solid fa-heart" aria-hidden="true" id="icon" style="color:red"></i></div>
+        {% else %}
+        <div class="hrt addtowishlist  col-md-2"><i class="hr fa-lg fa-solid fa-heart" aria-hidden="true"></i></div>
+        {% endif %}
       </div>
     </div>
-    <div class="col-md-8 p-3" >
+    <div class="col-md-8 p-3 boredr shadow" >
       <div><h5 class="card-title">{{pdetail.product_name|title}}</h5><br>
         <p class="card-text">{{pdetail.product_details}}</p>
         <h5 class="card-text"><b>₹{{pdetail.product_price}}</b></h5>
         <p class="card-text">from : {{pdetail.product_place}}</p>
-        <p class="card-text"><small class="text-muted">seller : {{pdetail.seller.seller_name|title}}</small></p><b>{{ msg }}</b></div>
+        <p class="card-text"><small class="text-muted">seller : {{pdetail.seller.seller_name|title}}</small></p><b style="color:darkorange">{{ msg }}</b></div>
         <div class="row g-3">
       <div class="col-md-5"><button type="submit" class="btn btn-primary w-100"><i class="fa-solid fa-cart-shopping me-2"></i>Add to cart</button></div>
-      <div class="col-md-5"><a href="" class="btn btn-primary w-100"><i class="fa-sharp fa-solid fa-bag-shopping me-2"></i>Buy now</a></div>
       <div class="col-md-2"><p>Qty <input type="number" class="qty w-50" name="qty" data-item="{{cart.prod.id}}" value="1" min="1"
-        max="{{pdetail.current_stock}}"></p></div>
+        max="{{pdetail.current_stock}}"></p> 
         </div>    
       <div class="bg-light mt-2"><img src="{%static 'images/box.png'%}" style="height:50px; width:50px;">Packed with lots of Love !
         <img src="{%static 'images/unbox.png'%}" style="height:35px; width:35px; margin-left:40px;"> Dispatches within 48 hrs ! </div>
+        {% if pdetail.current_stock > 0 %}
         <p class="card-text"><small class="text-muted">{{pdetail.current_stock|title}} product left</small></p>
+        {% else %}
+        <span><p style="color: red;" >Currently Unavailable</p></span>
+        {% endif %}
       </div>
         <form>
       </div>
   </div>
 </div>
 
-{% comment %} <script>
-  $('#qty').change(function(){
-    $.ajaxSetup({
-      headers: {
-          "X-CSRFToken": $('[name=csrfmiddlewaretoken]').val() 
-      }
-  }) 
-  $.ajax({
-    
-    url:'{% url "customer:totalprice" %}',  
-    type:'POST',         
-    data:{                           
-        id:$(this).val()
-    },
-    success:function(response){
-        
- 
-        $('#c_stock').val(response.stock)                   
-        $('#p_id').val(response.pro_id)
-        $('#c_price').val(response.p_price)
 
-    }
 
-})
-})     
-        
-   
-</script> {% endcomment %}
 
 <script>
-  var heartIcon = document.getElementById("heart-icon");
-  heartIcon.addEventListener("click", function() {
-    heartIcon.classList.toggle("active");
-  });
-</script>
 
+$(document).ready(function () {
+      $.ajaxSetup({
+        headers: {
+          "X-CSRFToken": '{{ csrf_token }}'
+        }
+      })
+      $('.addtowishlist').click(function (e) {
+        e.preventDefault();
+
+        var product_id = $(this).closest('.prod_data').find('.prod_id').val();
+        var button =$(this)
+        $.ajax({
+          method: 'POST',
+          url: "{% url 'customer:addtowishlist' %}",
+          data: {
+            'product_id': product_id
+          },
+          success: function (response) {
+            button.toggleClass('in-wishlist')
+            button.hasClass('in-wishlist')
+            button.css('color','red');
+          }
+        })
+      })
+    })
+
+</script>
 {% endblock %}

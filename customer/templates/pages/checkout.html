@@ -10,17 +10,17 @@
                 <h5 class="mb-3">Billing address</h5>
             </div>
             <div class="flex ">
-                <form class="border shadow bg-light p-4 mb-5 me-5 ms-5" method="POST">
+                <form action="{% url 'customer:placeorder'%}" class="border shadow bg-light p-4 mb-5 me-5 ms-5" method="POST" >
                    {% csrf_token %} 
                     <div class="row g-3">
                         <div class="col-sm-6">
                             <label for="firstName" class="form-label">First name</label>
-                            <input type="text" class="form-control" id="firstName" name="fname" placeholder="" value="">
+                            <input type="text" class="form-control" name="first_name">
                         </div>
 
                         <div class="col-sm-6">
                             <label for="lastName" class="form-label">Last name</label>
-                            <input type="text" class="form-control" id="lastName" name="sname" placeholder="" value="">
+                            <input type="text" class="form-control" name="second_name">
                         </div>
 
                         <div class="col-12">
@@ -30,7 +30,7 @@
 
                         <div class="col-6">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com">
+                            <input type="email" class="form-control" name="email" placeholder="you@example.com">
                         </div>
 
                         <div class="col-6">
@@ -40,7 +40,7 @@
 
                         <div class="col-md-6">
                             <label for="state" class="form-label">State</label>
-                            <select class="form-select" id="state" name="state">
+                            <select class="form-select" name="state">
                                 <option selected disabled>Choose...</option>
                                 <option>Arunachal Pradesh</option>
                                 <option>Assam</option>
@@ -76,12 +76,12 @@
 
                         <div class="col-md-3">
                             <label for="city" class="form-label">City</label>
-                            <input type="text" class="form-control" name="city" placeholder="">
+                            <input type="text" class="form-control" name="city" >
                         </div>
 
                         <div class="col-md-3">
                             <label for="zip" class="form-label">PIN</label>
-                            <input type="text" class="form-control" name="pin" placeholder="">
+                            <input type="text" class="form-control" name="pin">
                         </div>
                     </div>
                     <input type="text" class="form-control" hidden name="payment_mode">
@@ -91,7 +91,7 @@
             <h5 class="mt-3">Order summary</h5>
             <div class="card bg-white "  style="height: 320px; overflow: auto; border:none;">
                 <div class="card-body">
-                    {% for products in cart %}
+                    {% for products in cart_list %}
                 <div class="row">
                     <span class="col-md-3"><img src="{{ products.prod.product_image.url}}" alt="" style="height:60px; width: 60px;"
                             class="img-round-start ms-3 mt-2"></span>
@@ -104,15 +104,111 @@
             </div><hr>
             <div class="row">
                 <span>shipping : 100 ₹</span><br>
-                <span><h5>Total : {{totalprice}}</h5></span>
+                <span><h5>Total : {{total_price}}</h5></span>
+                <input type="text" hidden name="payment_mode" value="COD">
+
             </div>            
             <div class="row">
-
-                <button type="submit" class="btn btn-warning w-50 ms-5 mb-2">COD|place Oreder</button>
+                <div class="col-md-6">
+                    <button type="submit" class="btn btn-warning ">COD | place Oreder</button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-warning paywithrazorpay ">Pay with Razorpay</button>
+                </div>
             </div>
         </div>
     </form>
     </div>
 </div>
+<br><br>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+$(document).ready(function () {
+
+  $('.paywithrazorpay').click (function(e){
+      e.preventDefault();
+
+      var first_name =$("[name='first_name']").val();
+      var second_name =$("[name='second_name']").val();
+      var address =$("[name='address']").val();
+      var email =$("[name='email']").val();
+      var city =$("[name='city']").val();
+      var state =$("[name='state']").val();
+      var phone =$("[name='phone']").val();
+      var pin =$("[name='pin']").val();
+      var token = $("[name='csrfmiddlewaretoken']").val();
+
+      if(first_name == "" || second_name == "" || address == "" || city == "" || state == "" || phone == "" || pin == "")
+      {
+        swal("Alert!", "All fields are mandatory!", "error");
+        return false;
+      }
+      else
+      {
+        $.ajax({
+          method:"GET",
+          url:"{% url 'customer:payonline' %}",
+          success:function(response){
+            // console.log(response.total_price)
+            var options = {
+          "key": "rzp_test_TqFH7MRRil2aeq", // Enter the Key ID generated from the Dashboard
+          "amount":response.total_price*100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+          "currency": "INR",
+          "name": "Hcart", //your business name
+          "description": "Tank you for buying",
+          "image": "https://example.com/your_logo",
+          // "order_id": "order_9A33XWu170gUtm", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+          "handler": function (response){
+              // alert(response.razorpay_payment_id);
+              data = {
+                "first_name": first_name,   
+                "second_name":second_name,
+                "address": address,
+                "email":email,
+                "city": city,
+                "state": state,
+                "phone": phone,
+                "pin": pin,
+                "payment_mode":"paid by razorpay",
+                csrfmiddlewaretoken: token,
+              }
+              $.ajax({
+                method:"POST",
+                url:"{% url 'customer:placeorder' %}",
+                data:data,
+                success:function(response){
+                    swal("congratulation!","your order has been placed","success").then((value) => {
+                      window.location.replace("{% url 'customer:order' %}");
+                    });
+                }
+              });
+          },
+          "prefill": {
+              "name": first_name+""+second_name, //your customer's name
+              // "email": email,
+              "contact": phone
+          },
+          "notes": {
+              "address": "Razorpay Corporate Office"
+          },
+          "theme": {
+              "color": "#3399cc"
+          }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+            
+          }
+        });
+       
+      }
+    });
+});
+</script>
+
+
 
 {% endblock %}

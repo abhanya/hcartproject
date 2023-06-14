@@ -1,26 +1,31 @@
-{% extends 'pages/sellerhome.html' %}
+{% extends 'pages/sellermaster.html' %}
 {% load static %}
 {% block content %}
-
-
-<div class="col-sm-10">
-  <div class="row"> 
+<div class="row">
+  <div class="col-12 mt-5 ms-5">
+<div class="container-fluid col-sm-12 mt-5">
+  <div class="row mt-5"> 
     {% for product in product %}    
-    <div class="col-md-4 mt-3">
-      <div class="card-light shadow border mt-3 mb-3" style="height:330px;">
-        <div class="text-center">
-        <h6>{{product.product_name|title}}</h6>
+    <div class="col-md-3 mx-3">
+        <div class="card-light shadow border mt-3 mb-3">
+          <div class="card-body">
+            <div class="text-center mt-3">
+              <h6>{{product.prod.product_name|upper}}</h6>
+            </div>
+            <div class="product align-items-center p-2 text-center">
+              <img src="{{product.product_image.url}}" alt="" class="rounded img-fluid ">
+            </div>
+            <input type="number" hidden class="qty w-50" name="qty" value="1">
+            <div class="cost mt-3 text-dark text-center mb-3">
+              <span><b>{{product.product_name}}</b></span><br>
+              <span>₹ {{product.product_price}} /-</span>
+            </div>
+          </div>
+          <div class="card-footer text-center mb-3">
+          <a class="btn link-danger" href="{% url 'seller:deleteproduct' product.id %}"> <i class="fa-solid fa-trash me-2"></i>Delete Product</a>
+          </div>
         </div>
-        <div class="product align-items-center p-2 text-center">
-          <img src="{{product.product_image.url}}" alt="" class="rounded" width="160" height="140">
-        </div>
-        <div class="mt-3 info text-center">
-          <span class="text d-block">{{product.product_details}}</span>
-        </div>
-          <div class="cost mt-3 text-dark text-center">
-            <span>₹ {{product.product_price}}/-</span></div>
-        </div>
-      </div>
+    </div>
       {% endfor %}
     </div>
   </div>

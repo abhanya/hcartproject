@@ -1,50 +1,41 @@
 from django.shortcuts import render,redirect
-from hcart.models import Seller
+from hcart.models import Seller,Customer
+from customer.models import Oreder,Order_item
 from . models import Product
+from django.db import models
+from django.db.models import Count
 from django.http import JsonResponse
 
 
 # Create your views here.
 
 
-
-def home(request):
-    msg =""
+def masterpage(request):
     seller = Seller.objects.get(id = request.session['seller']) 
-    seller_products = Product.objects.filter(seller = request.session['seller'])
-    
-    if request.method=='POST':
-            # seller = Seller.objects.get(id = request.session['seller'])
-
-            seller_name = request.POST['s_name']
-            seller_email = request.POST['s_email']
-            seller_address = request.POST['s_address']
-            seller_phon = request.POST['s_number']
-            seller_gender = request.POST['s_gender']
-            business_name = request.POST['businame']
-            acc_num = request.POST['acc_number']
-            ifsc = request.POST['ifsc']
-            sellerimg = request.FILES['sellimg']
-
-
-            seller.seller_name = seller_name
-            seller.email = seller_email
-            seller.seller_add = seller_address
-            seller.seller_pho = seller_phon
-            seller.seller_gen = seller_gender
-            seller.comp_name = business_name
-            seller.acc_num = acc_num
-            seller.ifsc = ifsc
-            seller.seller_pic = sellerimg
-
-            seller.save()
-            msg = 'Profile updated successfully'
     context = {
                 'data': seller,
-                'product':seller_products,
-                'msg':msg
                 }
-
+    return render(request,'pages/sellermaster.html',context)
+def home(request):
+    seller_data = Seller.objects.get(id=request.session['seller'])
+    seller_products = Product.objects.filter(seller = request.session['seller'])
+    products_count = seller_products.count()
+    order =Order_item.objects.filter(seller=request.session['seller']).order_by('-id')[:6]
+    order_count = order.count()
+    pending = Order_item.objects.filter(seller=request.session['seller'],status='pending')
+    pending_count = pending.count()
+    delivered = Order_item.objects.filter(seller=request.session['seller'],status='delivered')
+    delivered_count = delivered.count()
+    topsellingproduct = Order_item.objects.filter(seller=request.session['seller']).annotate(count=Count('product_id')).order_by('-count').values('product__product_name','product__product_image','product__product_price',)[:3]
+    context = {
+        'data' : seller_data,
+        'products_count': products_count,
+        'order_count':order_count,
+        'order':order,
+        'pending_count':pending_count,
+        'delivered_count':delivered_count,
+        'topselling':topsellingproduct,
+    }
     return render(request,'pages/sellerhome.html',context)
 
 def addpro(request):
@@ -115,14 +106,40 @@ def sellpassword(request):
     return render(request,'pages/spassword.html',context)
 
 def sellerprof(request):
-        msg = ""
-        seller_data = Seller.objects.get(id = request.session['seller']) 
-        
-        
-        context = {
-        
-        }
-        return render(request,'pages/sellerprof.html',context)
+    msg =""
+    seller = Seller.objects.get(id = request.session['seller']) 
+    seller_products = Product.objects.filter(seller = request.session['seller'])
+    
+    if request.method=='POST':
+            # seller = Seller.objects.get(id = request.session['seller'])
+
+            seller_name = request.POST['s_name']
+            seller_email = request.POST['s_email']
+            seller_address = request.POST['s_address']
+            seller_phon = request.POST['s_number']
+            business_name = request.POST['businame']
+            acc_num = request.POST['acc_number']
+            ifsc = request.POST['ifsc']
+            sellerimg = request.FILES['sellimg']
+
+
+            seller.seller_name = seller_name
+            seller.email = seller_email
+            seller.seller_add = seller_address
+            seller.seller_pho = seller_phon
+            seller.comp_name = business_name
+            seller.acc_num = acc_num
+            seller.ifsc = ifsc
+            seller.seller_pic = sellerimg
+
+            seller.save()
+            msg = 'Profile updated successfully'
+    context = {
+                'data': seller,
+                'product':seller_products,
+                'msg':msg
+                }
+    return render(request,'pages/sellerprof.html',context)
 
 def s_logout(request):
     del request.session['seller']
@@ -162,4 +179,26 @@ def get_stock(request):
     return JsonResponse({'pname':product_name,'stock':current_stock,'pro_id':product_id,'p_price':product_price,})
 
 def orders(request):
-     return render(request,'pages/orders.html')
+    orders = Order_item.objects.filter(seller=request.session['seller'])
+    context = {
+        'orderlist':orders,
+    }
+    return render(request,'pages/orders.html',context)
+
+def sellerorderdetails(request, customer_id):
+    seller_data = Seller.objects.get(id=request.session['seller'])
+    order =Order_item.objects.filter(oreder=customer_id, seller=request.session['seller']).first()
+    context = {'order': order,'data': seller_data}
+    return render(request, 'pages/orderdetails.html', context)
+
+def mark_as_delivered(request, s_id,o_id):
+    order = Order_item.objects.filter(seller=s_id,oreder=o_id)
+    for order in order:
+        order.status = 'delivered'
+        order.save()
+    return redirect('seller:orders')
+
+def delete_prod(request,pid):
+    prod_list = Product.objects.get(id = pid)
+    prod_list.delete()
+    return redirect('seller:catlog')

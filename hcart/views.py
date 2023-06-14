@@ -9,6 +9,20 @@ from django.http import JsonResponse
 # Create your views here.
 def catg(request):
     return render(request,'pages/category.html')
+
+def sellerlog(request):
+    msg = ''
+    if request.method == 'POST':
+        smail = request.POST['smail']
+        spassword = request.POST['spassw']
+        try:
+            seller =Seller.objects.get( seller_usr= smail, seller_pass = spassword,approved = True)
+            request.session['seller'] = seller.id
+            return redirect('seller:sellerhome')
+        except:
+            msg = 'incorrect username or password'
+    return render(request,'pages/slogin.html',{'msg':msg})
+
 def cart_login(request):
     msg = ''
     if request.method == 'POST':
@@ -88,22 +102,18 @@ def signup(request):
 
     return render(request,'pages/s_signup.html',{'msg':msg})
 
-def sellerlog(request):
-    msg = ""
-    if request.method == 'POST':
-        susername = request.POST['susrname']
-        spassword = request.POST['spassw']
-        try:
-            seller =Seller.objects.get(seller_usr = susername, seller_pass = spassword,approved = True)
-            request.session['seller'] = seller.id
-            return redirect('seller:sellerhome')
-        except:
-            msg = 'incorrect username or password'
-    return render(request,'pages/slogin.html',{'msg':msg})
-
 def email_exist(request):
     email = request.POST['email']   
 
     status = Customer.objects.filter(customer_email = email).exists()
 
     return JsonResponse({'status':status})
+
+def seller_email_exist(request):
+    email = request.POST['email']   
+
+    status = Seller.objects.filter(email = email).exists()
+
+    return JsonResponse({'status':status})
+def bestof(request):
+    return render(request,'pages/bestof.html')

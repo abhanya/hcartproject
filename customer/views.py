@@ -34,33 +34,67 @@ def homepage_master(request):
     return redirect('customer:customerhome')
 
 def custhom(request):
+    customer = Customer.objects.get(id = request.session['customer'])
+
     product = Product.objects.values('id','product_name','product_image')
     print(product)
+    sample_products = Product.objects.order_by('-id')[:4]
+    print(sample_products)
     customername = Customer.objects.get(id=request.session['customer'])
     context = {
-        'prods':product,
+        'prods':sample_products,
         'cusdata':customername,
         } 
     return render(request,'pages/home_page.html',context)
+def shop(request):
+    customer = Customer.objects.get(id = request.session['customer'])
+
+    product_list = Product.objects.all().order_by('product_name')
+    return render(request,'pages/shop.html',{'prods': product_list,'cusdata':customer})
 
 def whishlist(request):
+    customer = Customer.objects.get(id = request.session['customer'])
+    
     wishlist = Wishlist.objects.filter(cust = request.session['customer'])
- 
     context ={
         'wish_list':wishlist,
+        'cusdata':customer,
     }
     return render(request,'pages/wishlist.html',context)
 
+def addtocartfromwishlist(request,pid):
+    msg = ""
+    product_exists = Product.objects.filter(id=pid).exists()
+
+    if product_exists:
+        cart_exists = Cart.objects.filter(prod=pid, cust=request.session['customer']).exists()
+
+        if not cart_exists:
+            cart = Cart(cust_id=request.session['customer'], prod_id=pid)
+            cart.save()
+            return redirect('customer:cart')
+        else:
+            msg = "Product is already in the cart"
+    else:
+        msg = "Product does not exist"
+
+    return render(request,'pages/wishlist.html', {'msg': msg})
+
 @auth_customer
 def cart(request):
+    customer = Customer.objects.get(id = request.session['customer'])
     product_cart = Cart.objects.filter(cust = request.session['customer']).annotate(total_price = F('prod__product_price')*F('prod_quantity'))
     context ={
         'cart_list':product_cart,
+        'cusdata':customer,
+
     }
     return render(request,'pages/cart.html',context)
 
 @auth_customer
 def pdetails(request,pid):
+    customer = Customer.objects.get(id = request.session['customer'])
+
     msg = ''
     
     product_details = Product.objects.get(id = pid)
@@ -75,35 +109,68 @@ def pdetails(request,pid):
             cart = Cart(cust_id = request.session['customer'],prod_id = pid)
             cart.prod_quantity = qty
             cart.save()
-            return redirect('customer:cart')
+            msg = "Product Added to Cart"
+            # return redirect('customer:cart')
         else:
             msg ='already in cart'
 
     context = {
             'pdetail':product_details,
-            'msg':msg
+            'msg':msg,
+            'cusdata':customer,
+
         }
     return render(request,'pages/productdetails.html',context)
        
 
 
-def addtowishlist(request,pid):
-    msg = ""
-    product_details = Product.objects.get(id = pid)
-    product_exist = Wishlist.objects.filter(prod = pid,cust =request.session['customer']).exists()
+# def addtowishlist(request,pid):
+#     product_exist = Wishlist.objects.filter(prod = pid,cust =request.session['customer']).exists()
 
-    if not product_exist:                        
-            wish = Wishlist(cust_id = request.session['customer'],prod_id = pid)
-            wish.save()
-    else:
-        msg ='already in wishlist'
+#     if not product_exist:                        
+#             wish = Wishlist(cust_id = request.session['customer'],prod_id = pid)
+#             wish.save()
 
-    context = {
-            'pdetail':product_details,
-            'msg':msg
-        }
-    return render(request,'pages/productdetails.html',context)
 
+#             return redirect('customer:shop')
+#     else:
+#         return redirect('customer:wishlist')
+
+
+
+def addtowishlist(request):
+    if request.method == 'POST':
+
+        product_id = int(request.POST.get('product_id'))
+        product_exist = Product.objects.filter(id = product_id)
+        wishlist = request.session.get('wishlist', [])
+
+        if(product_exist):                        
+                if(Wishlist.objects.filter(cust_id = request.session['customer'],prod_id = product_id)):
+                    return JsonResponse({'status':'Product already exist'})
+                else:
+                    Wishlist.objects.create(cust_id = request.session['customer'],prod_id = product_id)
+                    if product_id not in wishlist:
+                        wishlist.append(product_id)
+                        request.session['wishlist'] = wishlist
+                    return JsonResponse({'status':'Product added '})
+        else:
+            return JsonResponse({'status':'No product found'})
+
+    return redirect('customer:wishlist')
+
+def removefromwishlist(request,pid):
+    wish_item = Wishlist.objects.get(prod = pid,cust = request.session['customer'])
+    wish_item.delete()
+    wishlist = request.session.get('wishlist', [])
+    if pid in wishlist:
+                        wishlist.remove(pid)
+                        request.session['wishlist'] = wishlist
+    return redirect('customer:wishlist')
+
+
+
+    
 def custpass(request):
     msg =''
     customer_data = Customer.objects.get(id=request.session['customer'])
@@ -164,10 +231,7 @@ def remove_item(request,pid):
     cart_item.delete()
     return redirect('customer:cart')
 
-def removefromwishlist(request,pid):
-    wish_item = Wishlist.objects.get(prod = pid,cust = request.session['customer'])
-    wish_item.delete()
-    return redirect('customer:wishlist')
+
 
 def c_logout(request):
     del request.session['customer'] 
@@ -191,11 +255,13 @@ def search_prod(request):
 def custcat(request,data=None):
     if data == None:
         products = Product.objects.all()
-    elif data == 'newcollections' or  data == 'Crafts' or data == 'home' or data == 'jwelry' or data == 'toy' or data == 'gift':
+    elif data == 'newcollections' or  data == 'Crafts' or data == 'Home & kitchen' or data == 'Jwellry' or data == 'Toys' or data == 'Giftings':
         products = Product.objects.filter(product_category = data)
-    return render(request,'pages/custcatg.html',{'prods':products})
-def bestof(request):
-    return render(request,'pages/bestof.html')
+    return render(request,'pages/custcatg.html',{'prods':products},)
+
+def craft_page(request):
+    crafts = Product.objects.filter(product_category = 'Crafts')
+    return render(request,'pages/craftpage.html',{'craft':crafts})
 
 def totalprice(request):
     qty = request.POST['qty']
@@ -222,16 +288,13 @@ def quantity(request):
     return JsonResponse({'success': False})
 
             
-def checkout(request):
-    cart_products = Cart.objects.filter(cust=request.session['customer'])
-    totalprice = 100
-    for item in cart_products :
-        totalprice = totalprice + item.prod.product_price * item.prod_quantity
-    if request.method == 'POST':
+def place_order(request):
+   
+   if request.method == 'POST':
         new_oreder = Oreder()
         new_oreder.cust = Customer.objects.get(id=request.session['customer'])
-        new_oreder.first_name = request.POST.get('fname')
-        new_oreder.second_name = request.POST.get('sname')
+        new_oreder.first_name = request.POST.get('first_name')
+        new_oreder.second_name = request.POST.get('second_name')
         new_oreder.address = request.POST.get('address')
         new_oreder.email = request.POST.get('email')
         new_oreder.phone = request.POST.get('phone')
@@ -269,20 +332,41 @@ def checkout(request):
 
         cart_item = Cart.objects.filter(cust=request.session['customer'])
         cart_item.delete()
+        paymode = request.POST.get('payment_mode')
+        if(paymode=='paid by razorpay'):
+            return JsonResponse({'status':'your order has been placed successfully'})
 
-    context={
-        'cart':cart_products,
-        'totalprice':totalprice
+        return redirect('customer:customerhome')
+
+def checkout(request):
+    customer = Customer.objects.get(id = request.session['customer'])
+
+    product_cart = Cart.objects.filter(cust=request.session['customer'])
+    total_price = 100
+    for item in product_cart:
+        total_price = total_price + item.prod.product_price * item.prod_quantity
+    context = {
+        'cart_list': product_cart,
+        'total_price': total_price,
+        'cusdata':customer,
     }
+    return render(request, 'pages/checkout.html', context)
 
-    return render(request,'pages/checkout.html',context)
+def payonline(request):
+    cart = Cart.objects.filter(cust=request.session['customer'])
+    total_price = 100
+    for item in cart:
+        total_price = total_price+item.prod.product_price*item.prod_quantity
+    return JsonResponse({'total_price': total_price})
 
 def orderpage(request):
-    customer = Customer.objects.get(id = request.session['customer'])
-    orderdata = Order_item.objects.filter(oreder_id=request.session['order'])
-    print(customer)
-    context={
-        'cust':customer,
-
+    customerdetal = Customer.objects.get(id = request.session['customer'])
+    customer = Oreder.objects.filter(cust_id=request.session['customer'])
+    product = Order_item.objects.filter(oreder__in=customer)
+    context = {
+        'cust': customer,
+        'order': product,
+        'cusdata':customerdetal,
     }
-    return render(request,'pages/myorders.html',context)
+    return render(request, 'pages/myorders.html', context)
+

@@ -4,6 +4,11 @@
 
 .ch{
   position: sticky; 
-  height: 530px;
+  /* height: 530px; */
 
+}
+.close {
+  position: absolute;
+  top: 0;
+  left: 0;
 }

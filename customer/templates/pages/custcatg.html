@@ -6,33 +6,38 @@
     <div class="row pt-5">
         <div class="col-sm-2">
             <div class="new">
-                <a href="{% url 'customer:custcatg' %}"><img src="{% static 'images/nwcoll.png' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;"></a> 
+                <a href="{% url 'customer:custcatg' %}">
+                <img src="{% static 'images/nwcoll.png' %}" class="rounded-circle img-fluid w-75" alt=""></a> 
             </div>
         </div>
         <div class="col-sm-2">
             <div class="crafts">
                 <a href="{% url 'customer:catogry' 'Crafts' %}">
-                <img src="{% static 'images/crft.jpg' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;"></a>
+                <img src="{% static 'images/craftimg.webp' %}" class="rounded-circle img-fluid" alt="" ></a>
             </div>
         </div>
         <div class="col-sm-2">
             <div class="home">
-                <img src="{% static 'images/hom.jpg' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;">
+                <a href="{% url 'customer:catogry' 'Home & kitchen' %}">
+                <img src="{% static 'images/hom.jpg' %}" class="rounded-circle img-fluid" alt=""></a>
             </div>
         </div>
         <div class="col-sm-2">
             <div class="jwelry">
-                <img src="{% static 'images/jw.jpg' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;">
+                <a href="{% url 'customer:catogry' 'Jwellry' %}">
+                <img src="{% static 'images/jw.jpg' %}" class="rounded-circle img-fluid w-75 ms-3" alt=""></a>
             </div>
         </div>
         <div class="col-sm-2">
             <div class="toys">
-                <img src="{% static 'images/toy.jpg' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;">
+                <a href="{% url 'customer:catogry' 'Toys' %}">
+                <img src="{% static 'images/toy.jpg' %}" class="rounded-circle img-fluid my-4" alt=""></a>
             </div>
         </div>
         <div class="col-sm-2">
             <div class="gift">
-                <img src="{% static 'images/gif.jpg' %}" class="rounded-circle" alt="" style="height: 150px; width: 150px;">
+                <a href="{% url 'customer:catogry' 'Giftings' %}">
+                <img src="{% static 'images/gifts.webp' %}" class="rounded-circle img-fluid  mx-4 my-4" alt=""></a>
             </div>
         </div>
     </div>
