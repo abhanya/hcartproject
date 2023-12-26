@@ -370,3 +370,5 @@ def orderpage(request):
     }
     return render(request, 'pages/myorders.html', context)
 
+
+

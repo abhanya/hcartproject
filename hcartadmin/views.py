@@ -112,3 +112,5 @@ def orderlist(request):
     return render(request,'pages/vieworederlist.html',{'order_list':orders})
 
 
+
+
